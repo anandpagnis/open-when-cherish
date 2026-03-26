@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, X } from "lucide-react";
 import { letters } from "@/data/letters";
@@ -27,6 +27,30 @@ const scatterPositions = [
 
 const Index = () => {
   const [selectedLetter, setSelectedLetter] = useState<Letter | null>(null);
+  const letterAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  const openLetter = useCallback((letter: Letter) => {
+    // Stop any currently playing letter audio
+    if (letterAudioRef.current) {
+      letterAudioRef.current.pause();
+      letterAudioRef.current = null;
+    }
+    // Play this letter's song
+    const audio = new Audio(letter.musicUrl);
+    audio.loop = true;
+    audio.volume = 0.25;
+    audio.play().catch(() => {});
+    letterAudioRef.current = audio;
+    setSelectedLetter(letter);
+  }, []);
+
+  const closeLetter = useCallback(() => {
+    if (letterAudioRef.current) {
+      letterAudioRef.current.pause();
+      letterAudioRef.current = null;
+    }
+    setSelectedLetter(null);
+  }, []);
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-4 py-8 paper-texture">
@@ -67,7 +91,7 @@ const Index = () => {
         {letters.map((letter, i) => (
           <motion.button
             key={letter.id}
-            onClick={() => setSelectedLetter(letter)}
+            onClick={() => openLetter(letter)}
             className={`group relative rounded-xl border border-border/60 px-4 py-5 text-left shadow-soft transition-all duration-300 hover:shadow-lifted sm:px-5 sm:py-6 ${pastelTones[i]} ${i === 6 ? "col-span-2 sm:col-span-1" : ""}`}
             initial={{ opacity: 0, y: 20, rotate: scatterPositions[i].rotate }}
             animate={{ opacity: 1, y: 0, rotate: scatterPositions[i].rotate }}
@@ -114,7 +138,7 @@ const Index = () => {
           >
             <motion.div
               className="absolute inset-0 bg-foreground/20 backdrop-blur-sm"
-              onClick={() => setSelectedLetter(null)}
+              onClick={closeLetter}
             />
             <motion.div
               className="relative z-10 w-full max-w-xl max-h-[85vh] overflow-y-auto rounded-2xl bg-cream border border-border paper-texture"
@@ -125,7 +149,7 @@ const Index = () => {
             >
               <div className="h-1.5 rounded-t-2xl bg-gradient-to-r from-gold/40 via-blush/40 to-gold/40" />
               <button
-                onClick={() => setSelectedLetter(null)}
+                onClick={closeLetter}
                 className="absolute right-3 top-5 rounded-full p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
               >
                 <X className="h-4 w-4" />
