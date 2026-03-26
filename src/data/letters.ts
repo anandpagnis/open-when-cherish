@@ -4,6 +4,7 @@ export interface Letter {
   emoji: string;
   color: string;
   message: string;
+  musicUrl: string;
 }
 
 export const letters: Letter[] = [
