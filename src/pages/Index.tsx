@@ -155,6 +155,22 @@ const Index = () => {
                 <X className="h-4 w-4" />
               </button>
               <div className="px-8 py-10 sm:px-10 sm:py-12">
+                {/* Watercolor image */}
+                <motion.div
+                  className="mb-6 overflow-hidden rounded-xl"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.15, duration: 0.4 }}
+                >
+                  <img
+                    src={selectedLetter.imageUrl}
+                    alt=""
+                    className="h-40 w-full object-cover opacity-80"
+                    loading="lazy"
+                    width={800}
+                    height={512}
+                  />
+                </motion.div>
                 <div className="mb-6 text-center">
                   <h2 className="font-display text-xl font-semibold italic text-foreground sm:text-2xl">
                     {selectedLetter.label}
