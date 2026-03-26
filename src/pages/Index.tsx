@@ -27,6 +27,30 @@ const scatterPositions = [
 
 const Index = () => {
   const [selectedLetter, setSelectedLetter] = useState<Letter | null>(null);
+  const letterAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  const openLetter = useCallback((letter: Letter) => {
+    // Stop any currently playing letter audio
+    if (letterAudioRef.current) {
+      letterAudioRef.current.pause();
+      letterAudioRef.current = null;
+    }
+    // Play this letter's song
+    const audio = new Audio(letter.musicUrl);
+    audio.loop = true;
+    audio.volume = 0.25;
+    audio.play().catch(() => {});
+    letterAudioRef.current = audio;
+    setSelectedLetter(letter);
+  }, []);
+
+  const closeLetter = useCallback(() => {
+    if (letterAudioRef.current) {
+      letterAudioRef.current.pause();
+      letterAudioRef.current = null;
+    }
+    setSelectedLetter(null);
+  }, []);
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-4 py-8 paper-texture">
