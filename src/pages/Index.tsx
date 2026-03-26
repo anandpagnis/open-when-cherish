@@ -141,7 +141,7 @@ const Index = () => {
               onClick={closeLetter}
             />
             <motion.div
-              className="relative z-10 w-full max-w-xl max-h-[85vh] overflow-y-auto rounded-2xl bg-cream border border-border paper-texture"
+              className="relative z-10 w-full max-w-4xl max-h-[85vh] overflow-y-auto rounded-2xl bg-cream border border-border paper-texture"
               initial={{ opacity: 0, y: 30, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.96 }}
@@ -150,50 +150,67 @@ const Index = () => {
               <div className="h-1.5 rounded-t-2xl bg-gradient-to-r from-gold/40 via-blush/40 to-gold/40" />
               <button
                 onClick={closeLetter}
-                className="absolute right-3 top-5 rounded-full p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                className="absolute right-3 top-5 z-20 rounded-full p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
               >
                 <X className="h-4 w-4" />
               </button>
-              <div className="px-8 py-10 sm:px-10 sm:py-12">
-                {/* Watercolor image */}
+              <div className="flex">
+                {/* Left image */}
                 <motion.div
-                  className="mb-6 overflow-hidden rounded-xl"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  className="hidden sm:block w-36 flex-shrink-0 overflow-hidden rounded-bl-2xl"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.15, duration: 0.4 }}
                 >
                   <img
                     src={selectedLetter.imageUrl}
                     alt=""
-                    className="h-40 w-full object-cover opacity-80"
+                    className="h-full w-full object-cover opacity-70"
                     loading="lazy"
-                    width={800}
-                    height={512}
                   />
                 </motion.div>
-                <div className="mb-6 text-center">
-                  <h2 className="font-display text-xl font-semibold italic text-foreground sm:text-2xl">
-                    {selectedLetter.label}
-                  </h2>
-                  <div className="mx-auto mt-3 h-px w-12 bg-gradient-to-r from-transparent via-gold to-transparent" />
+
+                {/* Letter content */}
+                <div className="flex-1 px-8 py-10 sm:px-10 sm:py-12">
+                  <div className="mb-6 text-center">
+                    <h2 className="font-display text-xl font-semibold italic text-foreground sm:text-2xl">
+                      {selectedLetter.label}
+                    </h2>
+                    <div className="mx-auto mt-3 h-px w-12 bg-gradient-to-r from-transparent via-gold to-transparent" />
+                  </div>
+                  <motion.div
+                    className="font-handwritten text-xl leading-relaxed text-warm-brown sm:text-2xl"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2, duration: 0.4 }}
+                  >
+                    {selectedLetter.message.split("\n").map((line, i) => (
+                      <p key={i} className={line === "" ? "h-3" : "mb-1.5"}>
+                        {line}
+                      </p>
+                    ))}
+                  </motion.div>
+                  <div className="mt-8 flex items-center justify-center gap-2 text-blush/60">
+                    <div className="h-px w-10 bg-blush/30" />
+                    <Heart className="h-3 w-3 fill-current" />
+                    <div className="h-px w-10 bg-blush/30" />
+                  </div>
                 </div>
+
+                {/* Right image */}
                 <motion.div
-                  className="font-handwritten text-xl leading-relaxed text-warm-brown sm:text-2xl"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.4 }}
+                  className="hidden sm:block w-36 flex-shrink-0 overflow-hidden rounded-br-2xl"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.15, duration: 0.4 }}
                 >
-                  {selectedLetter.message.split("\n").map((line, i) => (
-                    <p key={i} className={line === "" ? "h-3" : "mb-1.5"}>
-                      {line}
-                    </p>
-                  ))}
+                  <img
+                    src={selectedLetter.imageUrl}
+                    alt=""
+                    className="h-full w-full object-cover opacity-70"
+                    loading="lazy"
+                  />
                 </motion.div>
-                <div className="mt-8 flex items-center justify-center gap-2 text-blush/60">
-                  <div className="h-px w-10 bg-blush/30" />
-                  <Heart className="h-3 w-3 fill-current" />
-                  <div className="h-px w-10 bg-blush/30" />
-                </div>
               </div>
             </motion.div>
           </motion.div>
